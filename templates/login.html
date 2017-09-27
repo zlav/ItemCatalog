@@ -1,0 +1,134 @@
+
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<div class="row divider blue">
+		<div class="col-md-12"></div>
+	</div>
+	<div class="row banner menu">
+		<div class="col-md-1"></div>
+		<div class="col-md-11 padding-none">
+			<h1>Log in</h1>
+		</div>
+	</div>
+
+
+
+<!-- Google Plus Login -->
+
+	<div id='signInButton'>
+		<span class='g-signin' 
+			data-scope='openid email'
+			data-clientid='1025388912495-urjniu08v6gq2amvo6qonp5qe8uqsq5o.apps.googleusercontent.com'
+			data-redirecturi='postmessage'
+			data-accesstype='offline'
+			data-cookiepolicy='single_host_origin'
+			data-callback='signInCallback'
+			data-approvalprompt='force'
+			>
+		</span>
+	</div>
+	<div id='result'></div>
+<script>
+function signInCallback(authResult){
+	if(authResult){
+		//Hide the sign in button
+		$('signInButton').attr('style', 'display:none');
+		//Send code to server and respond success
+		$.ajax({
+			type: 'POST',
+			url: '/gconnect?state={{STATE}}',
+			processData: false,
+			contentType: 'application/octet-stream; charset=utf-8',
+			data: authResult['code'],
+			success: function(result) {
+				if (result){
+					$('#result').html('Login Successful!<br>' + result + '<br>Redirecting...')
+					setTimeout(function() {
+						window.location.href='/catalog';
+					}, 4000);
+				}else if(authResult['error']){
+					console.log('There was an error: ' + authResult['error']);
+				}else{
+					$('#result').html('Failed to make a server call');
+				}
+			}
+		});
+	}			
+}
+</script>
+
+<!-- End Google Plus Sign In -->
+
+
+<!-- Facebook Login -->
+
+<script>
+
+
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '724974571021594' ,
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v2.10'
+    });
+    FB.AppEvents.logPageView();   
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
+
+
+//Seding new Token back to the server
+function sendTokenToServer() {
+    
+	var access_token = FB.getAuthResponse()['accessToken'];
+   console.log(access_token)
+   console.log('Welcome!  Fetching your information.... ');
+   FB.api('/me', function(response) {
+   	console.log('Successful login for: ' + response.name);
+     
+		//Ajax call
+		$.ajax({
+      	type: 'POST',
+      	url: '/fbconnect?state={{STATE}}',
+      	processData: false,
+      	data: access_token,
+      	contentType: 'application/octet-stream; charset=utf-8',
+      	
+			success: function(result) {
+        		// Handle or verify the server response if necessary.
+        		if (result) {
+          		$('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
+         		setTimeout(function() {
+          		window.location.href = "/catalog";
+         	}, 4000);
+         	} else {
+        			$('#result').html('Failed to make a server-side call. Check your configuration and console.');
+         	}
+      	}
+
+  		});
+	});
+}
+
+</script>
+
+
+<!-- Facebook button -->
+<button>
+	<fb:login-button scope="public_profile,email" onlogin="sendTokenToServer();">
+		<a href='javascript:sendTokenToServer()'>Login with Facebook</a>
+	</fb:login-button>
+</button>
+
+<!-- End Facebook Login -->
+
+{% endblock %}

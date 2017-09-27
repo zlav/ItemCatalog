@@ -1,0 +1,49 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<div class="row divider green">
+		<div class="col-md-12"></div>
+	</div>
+	<div class="row banner menu">
+		<div class="col-md-5 col-md-offset-1 padding-none">
+			<h1>{{ category.name }} Items<h1>
+		</div>
+		<div class="col-md-5 col-md-offset-1 padding-top">
+			<figure class="creator">
+				<img src="{{ url_for('static', filename='blank_user.gif') }}">
+				<figcaption>Created by {{ creator.name }} ({{creator.email}})</figcaption>
+			</figure>
+		</div>
+	</div>
+
+<div class = 'flash'>
+		      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+          
+        <ul>
+        {% for message in messages %}
+            <li> <strong> {{ message }} </strong> </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+
+</div>
+
+	{% if items !=[] %}	
+		<div class="row">
+			<div class="col-md-1"></div>
+			<div class="col-md-10">
+				<h2>Items for sale</h2>
+					{% for i in items %}
+						<div class="menu-item">
+							<a href='{{url_for('showInfo', category_id = category.id, item_id=i.id ) }}'>
+								<h3>{{i.name}}</h3></a>
+							<p>${{i.price}}</p>
+						</div>
+					{% endfor %}
+			</div>
+			<div class="col-md-1"></div>
+		</div>
+	{% endif %}
+{% endblock %}

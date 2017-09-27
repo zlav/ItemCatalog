@@ -1,0 +1,172 @@
+* {
+	font-family: "Helvetica Neue Bold", Roboto, Helvetica, Arial, sans-serif;
+	font-weight: 700;
+}
+
+h1 {
+	font-family: "Helvetica Neue Light", Roboto, Helvetica, Arial, sans-serif;
+	font-size: 35px;
+	color: #51453B;
+	line-height: 60px;
+	font-weight: 300;
+}
+
+h2 {
+	font-size: 24px;
+	color: #42C3C9;
+	line-height: 29px;
+}
+
+h3 {
+	font-size: 18px;
+	color: #4A4A4A;
+	line-height: 23px;
+}
+ p {
+ 	font-family: "Helvetica Neue", Roboto, Helvetica, Arial, sans-serif;
+ 	font-size: 16px;
+ 	color: #7B7573;
+ 	line-height: 24px;
+ 	font-weight: 400;
+ }
+
+ strong {
+ 	font-size: 16px;
+ 	color: #7B7573;
+ 	line-height: 24px;
+ }
+
+ a {
+ 	font-size: 14px;
+ 	color: #0093B9;
+ 	line-height: 17px;
+ }
+.padding-top {
+	padding-top: 20px;
+}
+.padding-bottom {
+	padding-bottom: 20px;
+}
+.padding-left {
+	padding-left: 20px;
+}
+.margin-right {
+	margin-right: 30px;
+}
+.padding-none {
+	padding: 0;
+}
+.btn {
+	padding: 9px;
+	margin: 0;
+	border-color: #9FB80A;
+	border-width: 2px;
+	color: #9FB80A;;
+}
+.btn:hover {
+	border-color: #9FB80A;
+}
+.btn.delete {
+	border-color: #aaaaaa;
+	color: #aaaaaa;
+}
+.btn.delete:hover {
+	border-color: #aaaaaa;
+	color: red;
+}
+.glyphicon {
+	margin-right: 10px;
+}
+.top-menu {
+	background-color: #737373;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.top-menu p {
+	margin-bottom: 0;
+	line-height: 16px;
+}
+.top-menu a {
+	margin-bottom: 0;
+	line-height: 16px;
+	font-size: 16px;
+	color: white;
+	font-weight: 400;
+}
+.divider {
+	height: 0px;
+}
+.divider.blue {
+	background-color: #737373;
+}
+.divider.green {
+	background-color: #737373;
+}
+.banner.main {
+	height: 10px;
+	background: url("/static/top-banner.jpg");
+	background-position: right;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+.banner.local {
+	height: 150px;
+	background-color: green;
+}
+.banner.menu {
+	height: 60px;
+	background-color: #b3ffb3;
+}
+.banner.profile {
+	height: 150px;
+	background-color: #A6E8EB;
+}
+.banner h1 {
+	margin: 5px 0;
+}
+ .restaurant-list {
+ 	background-color: #F0F0F0;
+ 	padding-left: 10px;
+ }
+ .restaurant-list:hover {
+ 	background-color: #e1e17f;
+ 	padding-left: 14px;
+}
+.menu-item {
+	background: #F0F0F0;
+	padding: 5px 10px;
+	width: 300px;
+	margin: 10px 0px;
+}
+.menu-item:hover {
+ 	background-color: #e1e17f;
+ 	padding-left: 14px;
+}
+.menu-price {
+	font-weight: 700;
+}
+.creator {
+	padding-right: 20px;
+	text-align: right;
+	margin-top: -15px;
+}
+.creator img {
+	width: 0px;
+	border-radius: 0%;
+}
+.creator figcaption {
+	font-size: 14px;
+	color: #7B7573;
+	font-weight: 400;
+}
+.flash {
+	background-color: #98FB98;
+	width:100%;
+	text-decoration: none;
+}
+
+.flash li {
+	list-style-type: none;
+	text-align: center;
+}
+
