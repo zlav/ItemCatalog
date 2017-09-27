@@ -97,7 +97,7 @@ def deleteCategory(category_id):
     for item in itemsInCategory:
         session.delete(item)
     session.delete(categoryToDelete)
-    flash('%s and It\'s Items Successfully Deleted ' % categoryToDelete.name)
+    flash('%s and Its Items Successfully Deleted ' % categoryToDelete.name)
     session.commit()
     return redirect(url_for('showCatalog'))
   else:
