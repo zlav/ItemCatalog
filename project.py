@@ -1,6 +1,6 @@
 #! /usr/bin/ python
 from flask import Flask, render_template, request, redirect,jsonify, url_for, flash
-
+from functools import wraps
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, Item, User
@@ -27,6 +27,14 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'username' not in login_session:
+            return redirect(url_for('showlogin', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
 
 #JSON APIs to view Catalog Information
 @app.route('/catalog/<int:category_id>/items/JSON')
@@ -77,6 +85,7 @@ def newCategory():
 
 #Edit a restaurant
 @app.route('/category/<int:category_id>/edit/', methods = ['GET', 'POST'])
+@login_required
 def editCategory(category_id):
   editedCategory = session.query(Category).filter_by(id = category_id).one()
   if request.method == 'POST':
@@ -90,12 +99,13 @@ def editCategory(category_id):
 
 #Delete a restaurant
 @app.route('/category/<int:category_id>/delete/', methods = ['GET','POST'])
+@login_required
 def deleteCategory(category_id):
   categoryToDelete = session.query(Category).filter_by(id = category_id).one()
   itemsInCategory = session.query(Item).filter_by(category_id = categoryToDelete.id)
   if request.method == 'POST':
-    for item in itemsInCategory:
-        session.delete(item)
+    # for item in itemsInCategory:
+    #    session.delete(item)
     session.delete(categoryToDelete)
     flash('%s and Its Items Successfully Deleted ' % categoryToDelete.name)
     session.commit()
@@ -125,6 +135,7 @@ def showInfo(category_id, item_id):
 
 #Create a new item
 @app.route('/catalog/<int:category_id>/items/new/',methods=['GET','POST'])
+@login_required
 def newItem(category_id):
   category = session.query(Category).filter_by(id = category_id).one()
   if request.method == 'POST':
@@ -138,6 +149,7 @@ def newItem(category_id):
 
 #Edit an item
 @app.route('/catalog/<int:category_id>/items/<int:item_id>/edit', methods=['GET','POST'])
+@login_required
 def editItem(category_id, item_id):
 
     editedItem = session.query(Item).filter_by(id = item_id).one()
@@ -159,6 +171,7 @@ def editItem(category_id, item_id):
 
 #Delete an item
 @app.route('/category/<int:category_id>/item/<int:item_id>/delete', methods = ['GET','POST'])
+@login_required
 def deleteItem(category_id, item_id):
     category = session.query(Category).filter_by(id = category_id).first()
     itemToDelete = session.query(Item).filter_by(id = item_id).one() 

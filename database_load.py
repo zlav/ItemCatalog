@@ -113,5 +113,21 @@ Item12 = Item(user_id=1, name="Ski Boots", description="Used to connect yourself
 session.add(Item12)
 session.commit()
 
+'''
+category_json = json.loads("""{
+    "all_categories": [
+        {
+            "name": "Ball",
+            "description": "Kicked in soccer",
+            "price": "20.99",
+        }
+    ]
+}""")
+
+for e in category_json['all_categories']:
+    category_input = Category(name=e['name'],user_id=1, description=['description'], price=['price'], category_id=categoryid)
+    session.add(cateogry_input)
+    session.commit()
+'''
 
 print "added categories and items with users!"
