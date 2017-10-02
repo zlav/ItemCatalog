@@ -70,7 +70,7 @@ class Item(Base):
             'description'       : self.description,
             'id'                : self.id,
             'price'             : self.price,
-            'category'          : self.category,
+            'category'          : self.category_id,
             'picture'           : self.picture,
             'user_id'           : self.user_id,
       }
