@@ -77,6 +77,7 @@ def showCatalog():
 
 # Create a new category
 @app.route('/catalog/new/', methods=['GET', 'POST'])
+@login_required
 def newCategory():
     if 'username' not in login_session:
         print "help"
@@ -97,13 +98,21 @@ def newCategory():
 @login_required
 def editCategory(category_id):
     editedCategory = session.query(Category).filter_by(id=category_id).one()
-    if request.method == 'POST':
-        if request.form['name']:
-            editedCategory.name = request.form['name']
-            flash('Category Successfully Edited %s' % editedCategory.name)
-            return redirect(url_for('showItems', category_id=category_id))
+    creator = getUserInfo(editedCategory.user_id).first()
+    if 'username' not in login_session or creator.id !=\
+            login_session['user_id']:
+        flash('Category not created by this user.' +
+              ' Please create your own category First.')
+        return redirect(url_for('showItems', category_id=category_id))
     else:
-        return render_template('editCategory.html', category=editedCategory)
+        if request.method == 'POST':
+            if request.form['name']:
+                editedCategory.name = request.form['name']
+                flash('Category Successfully Edited %s' % editedCategory.name)
+                return redirect(url_for('showItems', category_id=category_id))
+        else:
+            return render_template('editCategory.html',
+                                   category=editedCategory)
 
 
 # Delete a restaurant
@@ -113,16 +122,23 @@ def deleteCategory(category_id):
     categoryToDelete = session.query(Category).filter_by(id=category_id).one()
     itemsInCategory = session.query(Item).\
         filter_by(category_id=categoryToDelete.id)
-    if request.method == 'POST':
-        # for item in itemsInCategory:
-        #    session.delete(item)
-        session.delete(categoryToDelete)
-        flash('%s and Its Items Successfully Deleted ' % categoryToDelete.name)
-        session.commit()
-        return redirect(url_for('showCatalog'))
+    creator = getUserInfo(categoryToDelete.user_id).first()
+    if 'username' not in login_session or creator.id !=\
+            login_session['user_id']:
+        flash('Category not created by this user. Cannot be deleted.')
+        return redirect(url_for('showItems', category_id=category_id))
     else:
-        return render_template('deleteCategory.html',
-                               category=categoryToDelete)
+            if request.method == 'POST':
+                # for item in itemsInCategory:
+                #    session.delete(item)
+                session.delete(categoryToDelete)
+                flash('%s and Its Items Successfully Deleted '
+                      % categoryToDelete.name)
+                session.commit()
+                return redirect(url_for('showCatalog'))
+            else:
+                return render_template('deleteCategory.html',
+                                       category=categoryToDelete)
 
 
 # Show a categories Items
@@ -156,8 +172,8 @@ def showInfo(category_id, item_id):
                                category_id=category_id)
     else:
         print('items')
-        return render_template('itemsinfo.html', item=item,
-                               category=category_id)
+        return render_template('iteminfo.html', item=item,
+                               category_id=category_id)
 
 
 # Create a new item
@@ -397,16 +413,17 @@ def fbconnect():
     app_secret = json.loads(open('fb_client_secrets.json', 'r').
                             read())['web']['app_secret']
     url = 'https://graph.facebook.com/oauth/access_token?grant_type='
-    url += 'fb_exchange_token&client_id=%s&client_secret=%s'
-    url += '&fb_exchange_token=%s' % (app_id, app_secret, access_token)
+    url += 'fb_exchange_token&client_id=%s' % app_id
+    url += '&client_secret=%s&' % app_secret
+    url += 'fb_exchange_token=%s' % access_token
 
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
 
     # Retrieve User Information and strip the expire tag
     token = json.loads(result)["access_token"].split("&")[0]
-    url = 'https://graph.facebook.com/v2.8/me?access_token=%s&fields'
-    url += '=name,id,email,picture' % token
+    url = 'https://graph.facebook.com/v2.8/me?access_token='
+    url += '%s&fields=name,id,email,picture' % token
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
     login_session['access_token'] = token
