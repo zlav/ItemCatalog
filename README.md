@@ -1,4 +1,6 @@
 # The Item Catalog
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fzlav%2FItemCatalog.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fzlav%2FItemCatalog?ref=badge_shield)
+
 The Item Catalog is a shopping catalog that utilizes a python server as well as an sqlite database to track items.
 
 ## Installation
@@ -49,3 +51,6 @@ Using a Vagrant virtual machine is recomended however it is not neccesary.
 ## License
 GPL
 
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fzlav%2FItemCatalog.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fzlav%2FItemCatalog?ref=badge_large)
